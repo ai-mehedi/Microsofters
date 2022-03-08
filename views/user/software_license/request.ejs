@@ -1,0 +1,51 @@
+<%- include('../include/header') %>
+<section class="content-header">
+    <h1>
+        Dashboard
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-success">
+                <div class="box-header">
+                    <h4 class="box-title"><%= title %></h4>
+                </div>
+                <form class="box-body" method="post" sbform="true" saveid="#action_data" url="user_action/request_license">
+                    <div class="form-group">
+                        <label>License Key</label>
+                        <input type="text" class="form-control" placeholder="License Key" name="license_key">
+                    </div>
+                    <div class="form-group">
+                        <label>Software</label>
+                        <select class="form-control" name="software" required>
+                            <% for(var software of softwares){ %>
+                                <option value="<%= software.id; %>"><%= software.name; %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Duration <small>(hour)</small></label>
+                        <select class="form-control" name="duration" required>
+                            <% for(var i = 1;i < 500;i++){ %>
+                                <option value="<%= i; %>"><%= i; %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success"><%= title %></button>
+                    </div>
+                    <div class="form-group">
+                        <div id="action_data"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('../include/footer') %>

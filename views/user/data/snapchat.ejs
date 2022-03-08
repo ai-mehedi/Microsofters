@@ -1,0 +1,109 @@
+<%- include('../include/header') %>
+<section class="content-header">
+    <h1>
+        Dashboard
+        <small>Snapchats</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/admin/dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Snapchats</li>
+    </ol>
+</section>
+<form id="paginate_form" data-url="user_pagination/data/snapchats" method="get" onsubmit="return get_data_pagination()" class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-success">
+                <div class="box-header">
+                    <h3 class="box-title">Download Snap</h3>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>From Date</label>
+                        <input type="date" class="form-control" value="<% if(typeof data_query.from_date !== 'undefined'){__append(data_query.from_date);} %>" onchange="return get_data_pagination()" name="from_date">
+                    </div>
+                    <div class="form-group">
+                        <label>To Date</label>
+                        <input type="date" class="form-control" value="<% if(typeof data_query.to_date !== 'undefined'){__append(data_query.to_date);} %>" onchange="return get_data_pagination()" name="to_date">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" placeholder="Phone Number" value="<% if(typeof data_query.phone_number !== 'undefined'){__append(data_query.phone_number);} %>" oninput="return get_data_pagination()" class="form-control" name="phone_number">
+                    </div>
+                    <div class="form-group">
+                        <label>License Key</label>
+                        <input type="text" placeholder="License Key" value="<% if(typeof data_query.license_key !== 'undefined'){__append(data_query.license_key);} %>" oninput="return get_data_pagination()" class="form-control" name="license_key">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" onclick="return download_snap_data(this)">Download Snap</button>
+                        <button type="button" class="btn btn-danger" onclick="return remove_snap_data(this)">Remove Snap</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div  class="box box-success">
+                <div class="box-header">
+                    <h4 class="box-title">Snapchats</h4>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Phone Number</th>
+                            <th>Snapchat</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="get_paginate_data">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-sm no-margin pull-right" id="paginate_rows">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<%- include('../include/footer') %>
+<script>
+    get_data_pagination();
+    function remove_snap_data(e){
+        var password = prompt("Please enter your account password", "");
+        if(password){
+            $.ajax({
+                url: "/user_action/remove_snaps",
+                data: {
+                    from_date:document.querySelector('input[name="from_date"]').value,
+                    to_date:document.querySelector('input[name="to_date"]').value,
+                    phone_number:document.querySelector('input[name="phone_number"]').value,
+                    license_key:document.querySelector('input[name="license_key"]').value,
+                    password:password
+                },
+                method: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (rsp) {
+                    if(rsp.status == 1){
+                        alert('Data has been removed successfully.');
+                    }else{
+                        alert(rsp.msg);
+                    }
+                }
+            });
+        }
+    }
+    function download_snap_data(e){
+        post('/user_action/download_data', {
+            from_date:document.querySelector('input[name="from_date"]').value,
+            to_date:document.querySelector('input[name="to_date"]').value,
+            phone_number:document.querySelector('input[name="phone_number"]').value,
+            license_key:document.querySelector('input[name="license_key"]').value
+        });
+    }
+</script>

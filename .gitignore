@@ -1,0 +1,3 @@
+node_modules
+public/softwares/*
+!public/softwares/.gitkeep
